@@ -5,7 +5,7 @@ Name:       picoplayer
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Pico Player is minimal video player
-Version:    1.5.3
+Version:    1.5.4
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -32,7 +32,6 @@ BuildRequires:  pkgconfig(nemo-gstreamer-interfaces-1.0)
 BuildRequires:  dbus-glib-devel
 BuildRequires:  nemo-qml-plugin-notifications-qt5-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  ninja
 
 %description
 Short description of my Sailfish OS Application

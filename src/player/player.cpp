@@ -549,7 +549,7 @@ gboolean VideoPlayer::bus_call(GstBus *bus, GstMessage *msg, gpointer data) {
                     GstStructure *structure = gst_caps_get_structure(caps, 0);
                     if (structure) {
                         QString name = gst_structure_get_name(structure);
-                        if (name == "subpicture/x-pgs" || name == "audio/x-dts") continue;
+                        if (name == "subpicture/x-pgs" || name == "audio/x-dts" || name == "application/x-ass") continue;
                     }
                 }
                 gst_caps_unref(caps);

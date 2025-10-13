@@ -160,7 +160,7 @@ void QtCamViewfinderRendererNemo::paint(const QMatrix4x4& matrix, const QRectF& 
 
         locker.unlock();
 
-        if (currentBuffer) {
+        if (currentBuffer != nullptr) {
             gst_buffer_unref(currentBuffer);
         }
 
