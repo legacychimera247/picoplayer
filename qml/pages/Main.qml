@@ -4,6 +4,7 @@ import Sailfish.Pickers 1.0
 import QtDocGallery 5.0
 import Sailfish.Gallery 1.0
 import Nemo.Configuration 1.0
+import com.verdanditeam.yt 1.0
 
 Page {
     id: page
@@ -38,6 +39,28 @@ Page {
         filter: GalleryStartsWithFilter { property: "title"; value: searchField.text.toLowerCase().trim() }
     }
 
+    YtdlpStreamUrlResolver {
+        id: ytdlpStreamUrlResolver
+
+        onGotStreamUrl: {
+            pageBusyIndicator.running = false;
+            pageStack.push(Qt.resolvedUrl("VideoPlayer.qml"), {url: url, isLocal: false});
+        }
+    }
+
+    PageBusyIndicator {
+        id: pageBusyIndicator
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: pageBusyIndicator.running
+        z: 1000
+
+        onPressed: {}
+        onReleased: {}
+        onClicked: {}
+    }
     Formatter {
         id: formatter
     }
@@ -99,7 +122,15 @@ Page {
                 id: streamButton
                 text: qsTr("Open URL Stream…")
                 onClicked: {
-                    pageStack.push(urlPickerPage)
+                    pageStack.push(urlPickerPage, {ytdlp: true})
+                }
+            }
+
+            MenuItem {
+                id: ytdlpButton
+                text: qsTr("Open URL using yt-dlp")
+                onClicked: {
+                    pageStack.push(urlPickerPage, {ytdlp: true})
                 }
             }
 
@@ -268,7 +299,14 @@ Page {
         Dialog {
             allowedOrientations: Orientation.All
 
-            onAccepted: pageStack.push(Qt.resolvedUrl("VideoPlayer.qml"), {url: urlField.text, isLocal: false})
+            property bool ytdlp: false
+
+            onAccepted: if (ytdlp) {
+                            pageBusyIndicator.running = true;
+                            ytdlpStreamUrlResolver.resolve(urlField.text);
+                        } else {
+                            pageStack.push(Qt.resolvedUrl("VideoPlayer.qml"), {url: urlField.text, isLocal: false});
+                        }
 
             Column {
                 width: parent.width
@@ -279,7 +317,7 @@ Page {
                     id: urlField
                     width: parent.width
                     placeholderText: "https://…"
-                    label: qsTr("Stream URL")
+                    label: ytdlp ? qsTr("URL") : qsTr("Stream URL")
                     focus: true
                 }
             }

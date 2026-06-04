@@ -3,6 +3,7 @@
 #include "player/player.h"
 #include "volume/pulseaudiocontrol.h"
 #include "filehelper.h"
+#include "ytdlpstreamurlresolver.h"
 #include <execinfo.h>
 #include <unistd.h>
 #include <cxxabi.h>
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     view->rootContext()->setContextProperty("fileHelper", &fileHelper);
 
     qmlRegisterType<VideoPlayer>("com.verdanditeam.yt", 1, 0, "VideoPlayer");
+    qmlRegisterType<YtdlpStreamUrlResolver>("com.verdanditeam.yt", 1, 0, "YtdlpStreamUrlResolver");
 
     view->setSource(SailfishApp::pathTo("qml/picoplayer.qml"));
     view->show();
