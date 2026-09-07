@@ -236,7 +236,7 @@ Page {
                 BusyIndicator {
                     size: BusyIndicatorSize.Large
                     anchors.centerIn: parent
-                    running: !isLocal && videoPlayer.bufferProgress != 1
+                    running: !isLocal && videoPlayer.bufferProgress < 0.05
                 }
 
                 PinchArea {
@@ -510,7 +510,7 @@ Page {
                 id: streamsDialog
 
                 Dialog {
-                    canAccept: false
+                    forwardNavigation: false
                     allowedOrientations: Orientation.All
 
                     Component {
@@ -539,7 +539,9 @@ Page {
                                 currentIndex = currentIndex
                             }
 
-                            onCurrentIndexChanged: if (!_menuOpen) videoPlayer.selectVideoStream(currentIndex - 1)
+                            onCurrentIndexChanged: {
+                                if (_menuOpen) videoPlayer.selectVideoStream(currentIndex - 1)
+                            }
 
                             menu: ContextMenu {
                                 Repeater {
@@ -560,7 +562,9 @@ Page {
                                 currentIndex = currentIndex
                             }
 
-                            onCurrentIndexChanged: if (!_menuOpen) videoPlayer.selectAudioStream(currentIndex - 1)
+                            onCurrentIndexChanged: {
+                                if (_menuOpen) videoPlayer.selectAudioStream(currentIndex - 1)
+                            }
 
                             menu: ContextMenu {
                                 Repeater {
@@ -576,13 +580,14 @@ Page {
                             width: parent.width
                             label: qsTr("Subtitle track")
 
-
                             Component.onCompleted: {
                                 currentIndex = videoPlayer.selectedSubtitleStream + 1
                                 currentIndex = currentIndex
                             }
 
-                            onCurrentIndexChanged: videoPlayer.selectSubtitle(currentIndex - 1)
+                            onCurrentIndexChanged: {
+                                if (_menuOpen) videoPlayer.selectSubtitle(currentIndex - 1)
+                            }
 
                             menu: ContextMenu {
                                 Repeater {
@@ -637,7 +642,7 @@ Page {
                 anchors.top: parent.top
                 anchors.topMargin: width - height + Theme.paddingMedium*2
                 anchors.rightMargin: -(width) + height + Theme.paddingMedium
-                width: Theme.itemSizeHuge*2
+                width: Theme.itemSizeHuge*4
                 value: 1.0
                 minimumValue: 0.25
                 maximumValue: 2.0
